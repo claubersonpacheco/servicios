@@ -215,7 +215,6 @@
 
                             <div class="grid max-h-72 gap-3 overflow-y-auto rounded-xl border border-layer-line bg-surface p-4 md:grid-cols-2">
                                 @forelse ($permissions as $permission)
-                                {{ $permission->id }}
                                     <label class="flex items-center gap-3 rounded-lg border border-layer-line/70 px-3 py-2 text-sm text-foreground">
                                         <input
                                             type="checkbox"

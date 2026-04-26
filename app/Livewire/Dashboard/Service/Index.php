@@ -20,71 +20,66 @@ class Index extends Component
     use WithPagination;
 
     public int $quantity = 10;
-
     public string $search = '';
-
     public string $sortBy = 'created_at';
-
     public string $sortDirection = 'desc';
 
     public ?int $editingServiceId = null;
-
     public ?int $user_id = null;
 
     public string $code = '';
-
     public string $address = '';
-
     public string $postal = '';
-
     public string $description = '';
-
     public string $status = 'abierto';
 
     public string $date_start = '';
-
     public string $date_end = '';
-
     public string $hour_start = '';
-
     public string $hour_end = '';
 
     public bool $showFormModal = false;
-
     public bool $showDeleteModal = false;
 
     public ?int $deletingServiceId = null;
-
     public string $deletingServiceCode = '';
 
-    public function mount(): void
-    {
-        abort_unless(Auth::user()?->can('services.view'), 403);
-    }
-
+    /* =========================
+        LISTAGEM
+    ========================= */
     #[Computed]
     public function rows(): LengthAwarePaginator
     {
         return Service::query()
             ->with('user')
+            ->visibleFor(Auth::user()) // 👈 SCOPED RULE
+
             ->when(
-                filled(trim($this->search)),
-                fn (Builder $query) => $query->where(function (Builder $builder): void {
-                    $term = '%' . trim($this->search) . '%';
+                filled($this->search),
+                fn($query) => $query->where(function (Builder $builder) {
+                    $term = "%{$this->search}%";
 
                     $builder
                         ->where('code', 'like', $term)
                         ->orWhere('address', 'like', $term)
                         ->orWhere('postal', 'like', $term)
                         ->orWhere('description', 'like', $term)
-                        ->orWhereHas('user', fn (Builder $userQuery) => $userQuery->where('name', 'like', $term));
+                        ->orWhereHas(
+                            'user',
+                            fn($q) =>
+                            $q->where('name', 'like', $term)
+                        );
                 })
             )
+
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->quantity)
             ->withQueryString();
     }
 
+    /* =========================
+        USERS
+    ========================= */
     #[Computed]
     public function users(): Collection
     {
@@ -93,16 +88,19 @@ class Index extends Component
             ->get(['id', 'name']);
     }
 
+    /* =========================
+        STATS (SCOPED)
+    ========================= */
     #[Computed]
     public function totalServices(): int
     {
-        return Service::query()->count();
+        return Service::visibleFor(Auth::user())->count();
     }
 
     #[Computed]
     public function openServices(): int
     {
-        return Service::query()
+        return Service::visibleFor(Auth::user())
             ->where('status', 'abierto')
             ->count();
     }
@@ -110,11 +108,14 @@ class Index extends Component
     #[Computed]
     public function closedServices(): int
     {
-        return Service::query()
+        return Service::visibleFor(Auth::user())
             ->where('status', 'cerrado')
             ->count();
     }
 
+    /* =========================
+        SORT / SEARCH
+    ========================= */
     public function updatedSearch(): void
     {
         $this->resetPage();
@@ -127,11 +128,13 @@ class Index extends Component
 
     public function sort(string $column): void
     {
-        abort_unless(in_array($column, ['code', 'status', 'date_start', 'created_at'], true), 404);
+        abort_unless(
+            in_array($column, ['code', 'status', 'date_start', 'created_at'], true),
+            404
+        );
 
         if ($this->sortBy === $column) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-
             return;
         }
 
@@ -139,17 +142,25 @@ class Index extends Component
         $this->sortDirection = 'asc';
     }
 
+    /* =========================
+        CREATE
+    ========================= */
     public function create(): void
     {
-        $this->authorizeManage();
+        $this->authorize('create', Service::class);
+
         $this->resetForm();
         $this->showFormModal = true;
     }
 
+    /* =========================
+        EDIT
+    ========================= */
     public function edit(int $serviceId): void
     {
-        $this->authorizeManage();
-        $service = Service::query()->findOrFail($serviceId);
+        $service = Service::findOrFail($serviceId);
+
+        $this->authorize('update', $service);
 
         $this->resetErrorBag();
         $this->resetValidation();
@@ -165,24 +176,18 @@ class Index extends Component
         $this->date_end = $service->date_end?->format('Y-m-d') ?? '';
         $this->hour_start = $service->hour_start?->format('H:i') ?? '';
         $this->hour_end = $service->hour_end?->format('H:i') ?? '';
+
         $this->showFormModal = true;
     }
 
+    /* =========================
+        SAVE
+    ========================= */
     public function save(): void
     {
-        $this->authorizeManage();
-        $validated = $this->validate($this->rules(), [], [
-            'user_id' => 'responsavel',
-            'code' => 'codigo',
-            'address' => 'endereco',
-            'postal' => 'codigo postal',
-            'description' => 'descricao',
-            'status' => 'status',
-            'date_start' => 'data inicial',
-            'date_end' => 'data final',
-            'hour_start' => 'hora inicial',
-            'hour_end' => 'hora final',
-        ]);
+        $this->authorize('create', Service::class);
+
+        $validated = $this->validate($this->rules());
 
         $payload = [
             'user_id' => $validated['user_id'],
@@ -198,10 +203,16 @@ class Index extends Component
         ];
 
         if ($this->editingServiceId) {
-            Service::query()->findOrFail($this->editingServiceId)->update($payload);
+            $service = Service::findOrFail($this->editingServiceId);
+
+            $this->authorize('update', $service);
+
+            $service->update($payload);
+
             session()->flash('status', 'Servicio actualizado com sucesso.');
         } else {
-            Service::query()->create($payload);
+            Service::create($payload);
+
             session()->flash('status', 'Servicio criado com sucesso.');
         }
 
@@ -209,20 +220,28 @@ class Index extends Component
         $this->resetPage();
     }
 
+    /* =========================
+        DELETE
+    ========================= */
     public function confirmDelete(int $serviceId): void
     {
-        $this->authorizeManage();
-        $service = Service::query()->findOrFail($serviceId);
+        $service = Service::findOrFail($serviceId);
+
+        $this->authorize('delete', $service);
 
         $this->deletingServiceId = $service->id;
         $this->deletingServiceCode = $service->code;
+
         $this->showDeleteModal = true;
     }
 
     public function destroy(): void
     {
-        $this->authorizeManage();
-        Service::query()->findOrFail($this->deletingServiceId)->delete();
+        $service = Service::findOrFail($this->deletingServiceId);
+
+        $this->authorize('delete', $service);
+
+        $service->delete();
 
         session()->flash('status', 'Servicio excluido com sucesso.');
 
@@ -230,6 +249,9 @@ class Index extends Component
         $this->resetPage();
     }
 
+    /* =========================
+        MODALS
+    ========================= */
     public function closeFormModal(): void
     {
         $this->showFormModal = false;
@@ -243,11 +265,30 @@ class Index extends Component
         $this->deletingServiceCode = '';
     }
 
-    public function render()
+    /* =========================
+        RESET
+    ========================= */
+    protected function resetForm(): void
     {
-        return view('livewire.dashboard.service.index');
+        $this->resetErrorBag();
+        $this->resetValidation();
+
+        $this->editingServiceId = null;
+        $this->user_id = null;
+        $this->code = '';
+        $this->address = '';
+        $this->postal = '';
+        $this->description = '';
+        $this->status = 'abierto';
+        $this->date_start = '';
+        $this->date_end = '';
+        $this->hour_start = '';
+        $this->hour_end = '';
     }
 
+    /* =========================
+        RULES
+    ========================= */
     protected function rules(): array
     {
         return [
@@ -269,26 +310,8 @@ class Index extends Component
         ];
     }
 
-    protected function resetForm(): void
+    public function render()
     {
-        $this->resetErrorBag();
-        $this->resetValidation();
-
-        $this->editingServiceId = null;
-        $this->user_id = null;
-        $this->code = '';
-        $this->address = '';
-        $this->postal = '';
-        $this->description = '';
-        $this->status = 'abierto';
-        $this->date_start = '';
-        $this->date_end = '';
-        $this->hour_start = '';
-        $this->hour_end = '';
-    }
-
-    protected function authorizeManage(): void
-    {
-        abort_unless(Auth::user()?->can('services.manage'), 403);
+        return view('livewire.dashboard.service.index');
     }
 }

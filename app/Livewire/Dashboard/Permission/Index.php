@@ -55,7 +55,7 @@ class Index extends Component
             ->withCount('roles')
             ->when(
                 filled(trim($this->search)),
-                fn (Builder $query) => $query->where('name', 'like', '%' . trim($this->search) . '%')
+                fn(Builder $query) => $query->where('name', 'like', '%' . trim($this->search) . '%')
             )
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->quantity)
@@ -125,7 +125,7 @@ class Index extends Component
 
         $this->editingPermissionId = $permission->id;
         $this->name = $permission->name;
-        $this->role_ids = $permission->roles->pluck('id')->map(fn ($id) => (string) $id)->all();
+        $this->role_ids = $permission->roles->pluck('id')->map(fn($id) => (string) $id)->all();
         $this->showFormModal = true;
     }
 
@@ -152,7 +152,14 @@ class Index extends Component
             $message = 'Permission criada com sucesso.';
         }
 
-        $permission->syncRoles($validated['role_ids'] ?? []);
+        $roles = Role::whereIn(
+            'id',
+            array_map('intval', $validated['role_ids'] ?? [])
+        )->get();
+
+
+
+        $permission->syncRoles($roles);
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         session()->flash('status', $message);
@@ -210,7 +217,7 @@ class Index extends Component
                 'min:2',
                 'max:255',
                 Rule::unique('permissions', 'name')
-                    ->where(fn ($query) => $query->where('guard_name', 'web'))
+                    ->where(fn($query) => $query->where('guard_name', 'web'))
                     ->ignore($this->editingPermissionId),
             ],
             'role_ids' => ['array'],

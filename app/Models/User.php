@@ -50,4 +50,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Service::class);
     }
+
+    public function isMaster(): bool
+    {
+        return $this->hasRole('master');
+    }
+
+    public function canViewAllServices(): bool
+    {
+        return $this->can('service.view.all');
+    }
 }

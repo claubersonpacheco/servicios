@@ -27,13 +27,13 @@ class DatabaseSeeder extends Seeder
             'roles.manage',
             'permissions.view',
             'permissions.manage',
-        ])->map(fn (string $permission) => Permission::query()->firstOrCreate([
+        ])->map(fn(string $permission) => Permission::query()->firstOrCreate([
             'name' => $permission,
             'guard_name' => 'web',
         ]));
 
         $adminRole = Role::query()->firstOrCreate([
-            'name' => 'admin',
+            'name' => 'master',
             'guard_name' => 'web',
         ]);
         $adminRole->syncPermissions($permissions);
@@ -41,8 +41,8 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $user = User::query()->firstOrCreate(
-            ['email' => 'admin@admin.com'],
-            ['name' => 'Admin', 'password' => 'password']
+            ['email' => 'master@admin.com'],
+            ['name' => 'Master', 'password' => 'password']
         );
 
         $user->assignRole($adminRole);

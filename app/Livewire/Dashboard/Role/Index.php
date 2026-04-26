@@ -51,6 +51,7 @@ class Index extends Component
     public function rows(): LengthAwarePaginator
     {
         return Role::query()
+            ->where('name', '!=', 'master')
             ->with('permissions')
             ->withCount('permissions')
             ->when(

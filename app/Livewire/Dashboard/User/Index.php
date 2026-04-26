@@ -58,6 +58,13 @@ class Index extends Component
             ->with('roles')
             ->where('id', '!=', Auth::id())
             ->when(
+                !Auth::user()?->isMaster(), // 👈 só aplica se NÃO for master
+                fn(Builder $query) =>
+                $query->whereDoesntHave('roles', function (Builder $q) {
+                    $q->where('name', 'master');
+                })
+            )
+            ->when(
                 filled(trim($this->search)),
                 fn(Builder $query) => $query->where(function (Builder $builder): void {
                     $term = '%' . trim($this->search) . '%';
@@ -84,6 +91,11 @@ class Index extends Component
     public function roles(): Collection
     {
         return Role::query()
+            ->when(
+                !Auth::user()?->isMaster(), // 👈 se NÃO for master
+                fn (Builder $query) =>
+                    $query->where('name', '!=', 'master')
+            )
             ->orderBy('name')
             ->get(['id', 'name']);
     }
