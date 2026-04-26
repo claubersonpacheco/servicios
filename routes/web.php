@@ -5,8 +5,13 @@ use App\Livewire\Dashboard\Role\Index as RoleIndex;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Dashboard\User\Index as UserIndex;
 use App\Livewire\Dashboard\Service\Index as ServiceIndex;
+use App\Livewire\Front\Pages\Cookie;
+use App\Livewire\Front\Pages\Index;
+use App\Livewire\Front\Pages\Privacy;
 
-Route::view('/', 'welcome')->name('home');
+Route::livewire('/cookie', Cookie::class)->name('cookie');
+Route::livewire('/privacy', Privacy::class)->name('privacy');
+Route::livewire('/', Index::class)->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
