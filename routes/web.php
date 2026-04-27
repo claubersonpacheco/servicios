@@ -14,11 +14,11 @@ Route::livewire('/privacy', Privacy::class)->name('privacy');
 Route::livewire('/', Index::class)->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
+    //Route::view('dashboard', 'dashboard')->name('dashboard');
 
-    Route::livewire('/services', ServiceIndex::class)
+    Route::livewire('/dashboard', ServiceIndex::class)
         ->middleware('permission:services.view')
-        ->name('services.index');
+        ->name('dashboard');
 
     Route::livewire('/users', UserIndex::class)
         ->middleware('permission:users.view')

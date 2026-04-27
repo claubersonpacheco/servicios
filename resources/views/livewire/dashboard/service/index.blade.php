@@ -7,7 +7,7 @@
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Dashboard</p>
             <h1 class="mt-2 text-3xl font-semibold text-foreground">Servicios</h1>
             <p class="mt-2 text-sm text-muted-foreground">
-                Gerencie os servicos cadastrados com controle de responsavel, status e agenda.
+                Gestiona los servicios registrados, el control de responsables, el estado y las citas.
             </p>
         </div>
 
@@ -114,10 +114,10 @@
                             </button>
                         </th>
                         <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Hora</th>
-                        <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Responsavel</th>
+                        <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Responsable</th>
                         <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                             <button type="button" wire:click="sort('status')" class="inline-flex items-center gap-x-2">
-                                Status
+                                Estado
                                 @if ($sortBy === 'status')
                                     <span class="text-primary">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                 @endif
@@ -125,7 +125,7 @@
                         </th>
 
 
-                        <th class="px-5 py-3 text-end text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Acoes</th>
+                        <th class="px-5 py-3 text-end text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Aciones</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-layer-line">
@@ -202,9 +202,9 @@
                                             <path d="m21 21-4.3-4.3"/>
                                         </svg>
                                     </div>
-                                    <h3 class="mt-4 text-lg font-semibold text-foreground">Nenhum servicio encontrado</h3>
+                                    <h3 class="mt-4 text-lg font-semibold text-foreground">Ningun servicio encontrado</h3>
                                     <p class="mt-2 text-sm text-muted-foreground">
-                                        Ajuste os filtros ou crie um novo servicio.
+                                        Ajuste los filtros o crie un nuevo servicio.
                                     </p>
                                 </div>
                             </td>
@@ -246,12 +246,12 @@
                     <form wire:submit="save" class="space-y-5 px-6 py-6">
                         <div class="grid gap-5 md:grid-cols-2">
                             <label class="block">
-                                <span class="mb-2 block text-sm font-medium text-foreground">Responsavel</span>
+                                <span class="mb-2 block text-sm font-medium text-foreground">Responsable</span>
                                 <select
                                     wire:model.live="user_id"
                                     class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
                                 >
-                                    <option value="">Selecione</option>
+                                    <option value="">Seleccione</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">{{ $user->name }}</option>
                                     @endforeach
@@ -301,7 +301,7 @@
                             </label>
 
                             <label class="block">
-                                <span class="mb-2 block text-sm font-medium text-foreground">Status</span>
+                                <span class="mb-2 block text-sm font-medium text-foreground">Estado</span>
                                 <select
                                     wire:model.live="status"
                                     class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
@@ -413,7 +413,7 @@
 
                     <div class="px-6 py-6">
                         <p class="text-sm leading-6 text-foreground">
-                            Tem certeza que deseja excluir o servicio
+                            ¿Seguro que quiere excluir este servicio?
                             <span class="font-semibold">{{ $deletingServiceCode }}</span>?
                         </p>
 
@@ -430,7 +430,7 @@
                                 wire:click="destroy"
                                 class="inline-flex items-center justify-center rounded-lg bg-red-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-700"
                             >
-                                Confirmar exclusao
+                                Confirmar exclusion
                             </button>
                         </div>
                     </div>
