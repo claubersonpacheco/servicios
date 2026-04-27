@@ -7,7 +7,7 @@
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Dashboard</p>
             <h1 class="mt-2 text-3xl font-semibold text-foreground">Usuarios</h1>
             <p class="mt-2 text-sm text-muted-foreground">
-                Gerencie os acessos da plataforma com uma interface no estilo Preline.
+                Gestiona los usuarios de la plataforma
             </p>
         </div>
 
@@ -20,7 +20,7 @@
                 <path d="M5 12h14"/>
                 <path d="M12 5v14"/>
             </svg>
-            Novo usuario
+            Nuevo usuario
         </button>
     </div>
 
@@ -64,7 +64,7 @@
                             type="text"
                             wire:model.live.debounce.300ms="search"
                             class="block w-full rounded-lg border border-layer-line bg-surface py-3 ps-10 pe-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
-                            placeholder="Busque por nome ou e-mail"
+                            placeholder="Busca por nombre o correo electrónico"
                         >
                     </div>
                 </label>
@@ -100,7 +100,7 @@
                     <tr>
                         <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                             <button type="button" wire:click="sort('name')" class="inline-flex items-center gap-x-2">
-                                Nome
+                                Nombre
                                 @if ($sortBy === 'name')
                                     <span class="text-primary">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                 @endif
@@ -108,14 +108,14 @@
                         </th>
                         <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                             <button type="button" wire:click="sort('email')" class="inline-flex items-center gap-x-2">
-                                E-mail
+                                Correo eletrónico
                                 @if ($sortBy === 'email')
                                     <span class="text-primary">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                 @endif
                             </button>
                         </th>
                         <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                            Roles
+                            Funciones
                         </th>
                         <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                             <button type="button" wire:click="sort('created_at')" class="inline-flex items-center gap-x-2">
@@ -126,7 +126,7 @@
                             </button>
                         </th>
                         <th class="px-5 py-3 text-end text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                            Acoes
+                            Acciones
                         </th>
                     </tr>
                 </thead>
@@ -186,9 +186,9 @@
                                             <path d="m21 21-4.3-4.3"/>
                                         </svg>
                                     </div>
-                                    <h3 class="mt-4 text-lg font-semibold text-foreground">Nenhum usuario encontrado</h3>
+                                    <h3 class="mt-4 text-lg font-semibold text-foreground">No se encontró ningún usuario</h3>
                                     <p class="mt-2 text-sm text-muted-foreground">
-                                        Tente ajustar a busca ou crie um novo usuario.
+                                        Intenta ajustar la búsqueda o crear un nuevo usuario.
                                     </p>
                                 </div>
                             </td>
@@ -212,10 +212,10 @@
                     <div class="flex items-center justify-between border-b border-layer-line px-6 py-4">
                         <div>
                             <h3 class="text-lg font-semibold text-foreground">
-                                {{ $editingUserId ? 'Editar usuario' : 'Novo usuario' }}
+                                {{ $editingUserId ? 'Editar usuario' : 'Nuevo usuario' }}
                             </h3>
                             <p class="mt-1 text-sm text-muted-foreground">
-                                {{ $editingUserId ? 'Atualize os dados do usuario selecionado.' : 'Preencha os dados para criar um novo acesso.' }}
+                                {{ $editingUserId ? 'Actualiza los datos del usuario seleccionado.' : 'Rellena los datos para crear un nuevo acceso.' }}
                             </p>
                         </div>
 
@@ -230,12 +230,12 @@
                     <form wire:submit="save" class="space-y-5 px-6 py-6">
                         <div class="grid gap-5 md:grid-cols-2">
                             <label class="block md:col-span-2">
-                                <span class="mb-2 block text-sm font-medium text-foreground">Nome</span>
+                                <span class="mb-2 block text-sm font-medium text-foreground">Nombre</span>
                                 <input
                                     type="text"
                                     wire:model.live="name"
                                     class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
-                                    placeholder="Digite o nome do usuario"
+                                    placeholder="Introduce el nombre del usuario"
                                 >
                                 @error('name')
                                     <span class="mt-2 block text-sm text-red-600">{{ $message }}</span>
@@ -243,7 +243,7 @@
                             </label>
 
                             <label class="block md:col-span-2">
-                                <span class="mb-2 block text-sm font-medium text-foreground">E-mail</span>
+                                <span class="mb-2 block text-sm font-medium text-foreground">Correo eletrónico</span>
                                 <input
                                     type="email"
                                     wire:model.live="email"
@@ -257,7 +257,7 @@
 
                             <div class="block md:col-span-2">
                                 <div class="mb-2 flex items-center justify-between gap-3">
-                                    <span class="block text-sm font-medium text-foreground">Roles</span>
+                                    <span class="block text-sm font-medium text-foreground">Función(es)</span>
                                     <span class="text-xs text-muted-foreground">{{ count($role_ids) }} selecionada(s)</span>
                                 </div>
 
@@ -273,7 +273,7 @@
                                             <span>{{ $role->name }}</span>
                                         </label>
                                     @empty
-                                        <p class="text-sm text-muted-foreground">Nenhuma role cadastrada ainda.</p>
+                                        <p class="text-sm text-muted-foreground">Aún no hay roles registrados.</p>
                                     @endforelse
                                 </div>
                                 @error('role_ids.*')
@@ -283,13 +283,13 @@
 
                             <label class="block">
                                 <span class="mb-2 block text-sm font-medium text-foreground">
-                                    {{ $editingUserId ? 'Nova senha' : 'Senha' }}
+                                    {{ $editingUserId ? 'Nueva clave' : 'Clave' }}
                                 </span>
                                 <input
                                     type="password"
                                     wire:model.live="password"
                                     class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
-                                    placeholder="{{ $editingUserId ? 'Preencha somente se quiser alterar' : 'Minimo de 8 caracteres' }}"
+                                    placeholder="{{ $editingUserId ? 'Rellena solo si quieres cambiarlo' : 'Mínimo de 8 caracteres' }}"
                                 >
                                 @error('password')
                                     <span class="mt-2 block text-sm text-red-600">{{ $message }}</span>
@@ -297,12 +297,12 @@
                             </label>
 
                             <label class="block">
-                                <span class="mb-2 block text-sm font-medium text-foreground">Confirmar senha</span>
+                                <span class="mb-2 block text-sm font-medium text-foreground">Confirmar clave</span>
                                 <input
                                     type="password"
                                     wire:model.live="password_confirmation"
                                     class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
-                                    placeholder="Repita a senha"
+                                    placeholder="Repite la contraseña"
                                 >
                             </label>
                         </div>
@@ -319,7 +319,7 @@
                                 type="submit"
                                 class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-hover"
                             >
-                                {{ $editingUserId ? 'Salvar alteracoes' : 'Criar usuario' }}
+                                {{ $editingUserId ? 'Guardar cambios' : 'Crear usuario' }}
                             </button>
                         </div>
                     </form>
@@ -335,15 +335,15 @@
             <div class="flex min-h-full items-center justify-center p-4">
                 <div class="relative z-10 w-full max-w-lg rounded-2xl border border-layer-line bg-layer shadow-xl">
                     <div class="border-b border-layer-line px-6 py-4">
-                        <h3 class="text-lg font-semibold text-foreground">Excluir usuario</h3>
+                        <h3 class="text-lg font-semibold text-foreground">Eliminar usuario</h3>
                         <p class="mt-1 text-sm text-muted-foreground">
-                            Esta acao nao pode ser desfeita.
+                            Esta acción no se puede deshacer.
                         </p>
                     </div>
 
                     <div class="px-6 py-6">
                         <p class="text-sm leading-6 text-foreground">
-                            Tem certeza que deseja excluir o usuario
+                            ¿Estás seguro de que deseas eliminar al usuario?
                             <span class="font-semibold">{{ $deletingUserName }}</span>?
                         </p>
 
@@ -360,7 +360,8 @@
                                 wire:click="destroy"
                                 class="inline-flex items-center justify-center rounded-lg bg-red-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-700"
                             >
-                                Confirmar exclusao
+                            Confirmar eliminación
+
                             </button>
                         </div>
                     </div>
