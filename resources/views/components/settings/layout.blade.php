@@ -1,10 +1,9 @@
 <div class="flex flex-col gap-8 md:flex-row md:items-start">
     <aside class="w-full md:w-[240px]">
-        <nav aria-label="{{ __('Settings') }}" class="rounded-2xl border border-layer-line bg-layer p-2 shadow-sm">
+        <nav aria-label="{{ __('Ajustes') }}" class="rounded-2xl border border-layer-line bg-layer p-2 shadow-sm">
             @php($links = [
-                ['route' => 'profile.edit', 'label' => __('Profile')],
-                ['route' => 'security.edit', 'label' => __('Security')],
-                ['route' => 'appearance.edit', 'label' => __('Appearance')],
+                ['route' => 'profile.edit', 'label' => __('Perfil')],
+                ['route' => 'security.edit', 'label' => __('Seguridad')],
             ])
 
             @foreach ($links as $link)

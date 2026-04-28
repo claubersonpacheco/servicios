@@ -4,10 +4,10 @@
 
     <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Dashboard</p>
-            <h1 class="mt-2 text-3xl font-semibold text-foreground">Permissions</h1>
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Panel</p>
+            <h1 class="mt-2 text-3xl font-semibold text-foreground">Permisos</h1>
             <p class="mt-2 text-sm text-muted-foreground">
-                Cadastre permissoes do sistema e associe quais roles podem usa-las.
+                Registra permisos del sistema y asocia qué roles pueden utilizarlos.
             </p>
         </div>
 
@@ -20,7 +20,7 @@
                 <path d="M5 12h14"/>
                 <path d="M12 5v14"/>
             </svg>
-            Nova permission
+            Nuevo permiso
         </button>
     </div>
 
@@ -32,19 +32,19 @@
 
     <div class="grid gap-4 xl:grid-cols-3">
         <div class="rounded-2xl border border-layer-line bg-layer p-5 shadow-sm">
-            <p class="text-sm font-medium text-muted-foreground">Total de permissions</p>
+            <p class="text-sm font-medium text-muted-foreground">Total de permisos</p>
             <p class="mt-3 text-3xl font-semibold text-foreground">{{ $this->totalPermissions }}</p>
         </div>
 
         <div class="rounded-2xl border border-layer-line bg-layer p-5 shadow-sm">
-            <p class="text-sm font-medium text-muted-foreground">Roles disponiveis</p>
+            <p class="text-sm font-medium text-muted-foreground">Roles disponibles</p>
             <p class="mt-3 text-3xl font-semibold text-primary">{{ $this->totalRoles }}</p>
         </div>
 
         <div class="rounded-2xl border border-layer-line bg-layer p-5 shadow-sm">
             <div class="grid gap-4 md:grid-cols-[minmax(0,1fr)_160px]">
                 <label class="block">
-                    <span class="mb-2 block text-sm font-medium text-foreground">Buscar permission</span>
+                    <span class="mb-2 block text-sm font-medium text-foreground">Buscar permiso</span>
                     <div class="relative">
                         <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5">
                             <svg class="size-4 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -56,13 +56,13 @@
                             type="text"
                             wire:model.live.debounce.300ms="search"
                             class="block w-full rounded-lg border border-layer-line bg-surface py-3 ps-10 pe-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
-                            placeholder="Busque pelo nome"
+                            placeholder="Buscar por nombre"
                         >
                     </div>
                 </label>
 
                 <label class="block">
-                    <span class="mb-2 block text-sm font-medium text-foreground">Por pagina</span>
+                    <span class="mb-2 block text-sm font-medium text-foreground">Por página</span>
                     <select
                         wire:model.live="quantity"
                         class="block w-full rounded-lg border border-layer-line bg-surface px-3 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
@@ -79,7 +79,7 @@
     <div class="overflow-hidden rounded-2xl border border-layer-line bg-layer shadow-sm">
         <div class="flex items-center justify-between border-b border-layer-line px-5 py-4">
             <div>
-                <h2 class="text-lg font-semibold text-foreground">Lista de permissions</h2>
+                <h2 class="text-lg font-semibold text-foreground">Lista de permisos</h2>
                 <p class="mt-1 text-sm text-muted-foreground">{{ $rows->total() }} registro(s) encontrado(s)</p>
             </div>
         </div>
@@ -90,22 +90,22 @@
                     <tr>
                         <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                             <button type="button" wire:click="sort('name')" class="inline-flex items-center gap-x-2">
-                                Nome
+                                Nombre
                                 @if ($sortBy === 'name')
                                     <span class="text-primary">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                 @endif
                             </button>
                         </th>
-                        <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Roles vinculadas</th>
+                        <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Roles vinculados</th>
                         <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                             <button type="button" wire:click="sort('created_at')" class="inline-flex items-center gap-x-2">
-                                Criado em
+                                Creado en
                                 @if ($sortBy === 'created_at')
                                     <span class="text-primary">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                 @endif
                             </button>
                         </th>
-                        <th class="px-5 py-3 text-end text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Acoes</th>
+                        <th class="px-5 py-3 text-end text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-layer-line">
@@ -124,26 +124,18 @@
                                             {{ $role->name }}
                                         </span>
                                     @empty
-                                        <span class="text-sm text-muted-foreground">Sem roles vinculadas</span>
+                                        <span class="text-sm text-muted-foreground">Sin roles vinculados</span>
                                     @endforelse
                                 </div>
                             </td>
                             <td class="whitespace-nowrap px-5 py-4 text-sm text-muted-foreground">{{ $permission->created_at?->format('d/m/Y H:i') }}</td>
                             <td class="whitespace-nowrap px-5 py-4">
                                 <div class="flex items-center justify-end gap-2">
-                                    <button
-                                        type="button"
-                                        wire:click="edit({{ $permission->id }})"
-                                        class="inline-flex items-center gap-x-2 rounded-lg border border-layer-line bg-surface px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted-hover focus:outline-hidden"
-                                    >
+                                    <button type="button" wire:click="edit({{ $permission->id }})" class="inline-flex items-center gap-x-2 rounded-lg border border-layer-line bg-surface px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted-hover focus:outline-hidden">
                                         Editar
                                     </button>
-                                    <button
-                                        type="button"
-                                        wire:click="confirmDelete({{ $permission->id }})"
-                                        class="inline-flex items-center gap-x-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100 focus:outline-hidden"
-                                    >
-                                        Excluir
+                                    <button type="button" wire:click="confirmDelete({{ $permission->id }})" class="inline-flex items-center gap-x-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100 focus:outline-hidden">
+                                        Eliminar
                                     </button>
                                 </div>
                             </td>
@@ -158,8 +150,8 @@
                                             <path d="m21 21-4.3-4.3"/>
                                         </svg>
                                     </div>
-                                    <h3 class="mt-4 text-lg font-semibold text-foreground">Nenhuma permission encontrada</h3>
-                                    <p class="mt-2 text-sm text-muted-foreground">Ajuste a busca ou crie uma nova permission.</p>
+                                    <h3 class="mt-4 text-lg font-semibold text-foreground">No se encontraron permisos</h3>
+                                    <p class="mt-2 text-sm text-muted-foreground">Ajusta la búsqueda o crea un nuevo permiso.</p>
                                 </div>
                             </td>
                         </tr>
@@ -181,8 +173,8 @@
                 <div class="relative z-10 w-full max-w-3xl rounded-2xl border border-layer-line bg-layer shadow-xl">
                     <div class="flex items-center justify-between border-b border-layer-line px-6 py-4">
                         <div>
-                            <h3 class="text-lg font-semibold text-foreground">{{ $editingPermissionId ? 'Editar permission' : 'Nova permission' }}</h3>
-                            <p class="mt-1 text-sm text-muted-foreground">Defina o nome e as roles relacionadas.</p>
+                            <h3 class="text-lg font-semibold text-foreground">{{ $editingPermissionId ? 'Editar permiso' : 'Nuevo permiso' }}</h3>
+                            <p class="mt-1 text-sm text-muted-foreground">Define el nombre y los roles relacionados.</p>
                         </div>
 
                         <button type="button" wire:click="closeFormModal" class="inline-flex size-9 items-center justify-center rounded-full text-muted-foreground transition hover:bg-muted-hover hover:text-foreground">
@@ -195,12 +187,12 @@
 
                     <form wire:submit="save" class="space-y-5 px-6 py-6">
                         <label class="block">
-                            <span class="mb-2 block text-sm font-medium text-foreground">Nome da permission</span>
+                            <span class="mb-2 block text-sm font-medium text-foreground">Nombre del permiso</span>
                             <input
                                 type="text"
                                 wire:model.live="name"
                                 class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
-                                placeholder="Ex.: users.create"
+                                placeholder="Ej.: users.create"
                             >
                             @error('name')
                                 <span class="mt-2 block text-sm text-red-600">{{ $message }}</span>
@@ -210,7 +202,7 @@
                         <div>
                             <div class="mb-2 flex items-center justify-between gap-3">
                                 <span class="block text-sm font-medium text-foreground">Roles</span>
-                                <span class="text-xs text-muted-foreground">{{ count($role_ids) }} selecionada(s)</span>
+                                <span class="text-xs text-muted-foreground">{{ count($role_ids) }} seleccionado(s)</span>
                             </div>
 
                             <div class="grid max-h-72 gap-3 overflow-y-auto rounded-xl border border-layer-line bg-surface p-4 md:grid-cols-2">
@@ -225,7 +217,7 @@
                                         <span>{{ $role->name }}</span>
                                     </label>
                                 @empty
-                                    <p class="text-sm text-muted-foreground">Nenhuma role cadastrada ainda.</p>
+                                    <p class="text-sm text-muted-foreground">No hay roles registrados aún.</p>
                                 @endforelse
                             </div>
                             @error('role_ids.*')
@@ -238,7 +230,7 @@
                                 Cancelar
                             </button>
                             <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-hover">
-                                {{ $editingPermissionId ? 'Salvar alteracoes' : 'Criar permission' }}
+                                {{ $editingPermissionId ? 'Guardar cambios' : 'Crear permiso' }}
                             </button>
                         </div>
                     </form>
@@ -254,13 +246,13 @@
             <div class="flex min-h-full items-center justify-center p-4">
                 <div class="relative z-10 w-full max-w-lg rounded-2xl border border-layer-line bg-layer shadow-xl">
                     <div class="border-b border-layer-line px-6 py-4">
-                        <h3 class="text-lg font-semibold text-foreground">Excluir permission</h3>
-                        <p class="mt-1 text-sm text-muted-foreground">Esta acao nao pode ser desfeita.</p>
+                        <h3 class="text-lg font-semibold text-foreground">Eliminar permiso</h3>
+                        <p class="mt-1 text-sm text-muted-foreground">Esta acción no se puede deshacer.</p>
                     </div>
 
                     <div class="px-6 py-6">
                         <p class="text-sm leading-6 text-foreground">
-                            Tem certeza que deseja excluir a permission <span class="font-semibold">{{ $deletingPermissionName }}</span>?
+                            ¿Seguro que deseas eliminar el permiso <span class="font-semibold">{{ $deletingPermissionName }}</span>?
                         </p>
 
                         <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
@@ -268,7 +260,7 @@
                                 Cancelar
                             </button>
                             <button type="button" wire:click="destroy" class="inline-flex items-center justify-center rounded-lg bg-red-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-700">
-                                Confirmar exclusao
+                                Confirmar eliminación
                             </button>
                         </div>
                     </div>

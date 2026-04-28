@@ -1,54 +1,68 @@
 <div>
-<!-- Hero -->
-<div class="relative overflow-hidden">
-  <!-- Gradients -->
-  <div aria-hidden="true" class="flex absolute -top-96 start-1/2 transform -translate-x-1/2">
-    <div class="bg-linear-to-r from-violet-300/50 to-purple-100 blur-3xl w-100 h-175 rotate-[-60deg] transform -translate-x-40 dark:from-violet-900/50 dark:to-purple-900"></div>
-    <div class="bg-linear-to-tl from-blue-50 via-blue-100 to-blue-50 blur-3xl w-[1440px] h-200 rounded-fulls origin-top-left -rotate-12 -translate-x-60 dark:from-blue-900/70 dark:via-blue-900/70 dark:to-blue-900/70"></div>
-  </div>
-  <!-- End Gradients -->
+ <div class="relative overflow-hidden bg-white dark:bg-[#0a0a0a]">
 
-  <div class="relative z-10">
-    <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
-      <div class="max-w-2xl text-center mx-auto">
-        <p class="inline-block text-sm font-medium bg-clip-text bg-linear-to-l from-blue-600 to-violet-500 text-transparent dark:from-blue-400 dark:to-violet-400">
-          Preline: A vision for 2023
-        </p>
-
-        <!-- Title -->
-        <div class="mt-5 max-w-2xl">
-          <h1 class="block font-semibold text-gray-800 dark:text-neutral-200 text-4xl md:text-5xl lg:text-6xl">
-            The Intuitive Web Solutions
-          </h1>
-        </div>
-        <!-- End Title -->
-
-        <div class="mt-5 max-w-3xl">
-          <p class="text-lg text-gray-600 dark:text-neutral-300">Preline UI is an open-source set of prebuilt UI components, ready-to-use examples and Figma design system based on the utility-first Tailwind CSS framework.</p>
+        <!-- Background glow -->
+        <div class="absolute inset-0 -z-10">
+            <div class="absolute top-[-180px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-500/20 blur-[120px] rounded-full"></div>
+            <div class="absolute bottom-[-200px] right-[-120px] w-[500px] h-[500px] bg-indigo-500/20 blur-[120px] rounded-full"></div>
         </div>
 
-        <!-- Buttons -->
-        <div class="mt-8 gap-3 flex justify-center">
-          <a class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-blue-600 dark:bg-blue-500 border border-transparent text-white hover:bg-blue-700 dark:hover:bg-blue-600 focus:outline-hidden focus:bg-blue-700 dark:focus:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none" href="#">
-            Get started
-            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-          </a>
-          <a class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent text-gray-800 dark:text-neutral-200 hover:bg-gray-100 dark:hover:bg-neutral-700 focus:outline-hidden focus:bg-gray-100 dark:focus:bg-neutral-700 disabled:opacity-50 disabled:pointer-events-none" href="#">
-            <svg class="shrink-0 size-4" width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6.875 18C8.531 18 9.875 16.656 9.875 15V12H6.875C5.219 12 3.875 13.344 3.875 15C3.875 16.656 5.219 18 6.875 18Z" fill="#0ACF83"></path>
-              <path d="M3.875 9C3.875 7.344 5.219 6 6.875 6H9.875V12H6.875C5.219 12 3.875 10.656 3.875 9Z" fill="#A259FF"></path>
-              <path d="M3.875 3C3.875 1.344 5.219 0 6.875 0H9.875V6H6.875C5.219 6 3.875 4.656 3.875 3Z" fill="#F24E1E"></path>
-              <path d="M9.87501 0H12.875C14.531 0 15.875 1.344 15.875 3C15.875 4.656 14.531 6 12.875 6H9.87501V0Z" fill="#FF7262"></path>
-              <path d="M15.875 9C15.875 10.656 14.531 12 12.875 12C11.219 12 9.87501 10.656 9.87501 9C9.87501 7.344 11.219 6 12.875 6C14.531 6 15.875 7.344 15.875 9Z" fill="#1ABCFE"></path>
-            </svg>
-            Preline Figma
-          </a>
+        <div class="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
+
+            <!-- Badge -->
+            <div class="flex justify-center mb-6">
+                <span class="px-4 py-1 text-sm rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 bg-white/60 dark:bg-white/5 backdrop-blur">
+                    ⚙️ Plataforma de Gestión de Servicios
+                </span>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-center text-4xl md:text-6xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                Organiza todos tus servicios
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">
+                    en un único sistema
+                </span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="mt-6 text-center text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                Gestiona clientes, tareas y equipos de forma simple, rápida y centralizada.
+            </p>
+
+            <!-- CTA -->
+            <div class="mt-10 flex justify-center gap-4 flex-wrap">
+                <a href="#"
+                   class="px-6 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition">
+                    Empezar ahora
+                </a>
+
+                <a href="#"
+                   class="px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition">
+                    Ver demostración
+                </a>
+            </div>
+
+            <!-- Preview -->
+            <div class="mt-14 flex justify-center">
+                <div class="w-full max-w-4xl rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-white/5 shadow-xl overflow-hidden">
+
+                    <div class="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-400"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-400"></span>
+                    </div>
+
+                    <div class="p-10 space-y-3">
+                        <div class="h-4 w-48 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                        <div class="h-3 w-full bg-gray-100 dark:bg-gray-800 rounded"></div>
+                        <div class="h-3 w-5/6 bg-gray-100 dark:bg-gray-800 rounded"></div>
+                        <div class="h-3 w-3/4 bg-gray-100 dark:bg-gray-800 rounded"></div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
-        <!-- End Buttons -->
-      </div>
     </div>
-  </div>
-</div>
-<!-- End Hero -->
 
 </div>

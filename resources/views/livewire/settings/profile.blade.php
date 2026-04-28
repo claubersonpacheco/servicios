@@ -1,9 +1,9 @@
 <section class="w-full">
     @include('partials.settings-heading')
 
-    <h2 class="sr-only">{{ __('Profile settings') }}</h2>
+    <h2 class="sr-only">{{ __('Configuración del perfil') }}</h2>
 
-    <x-settings.layout :heading="__('Profile')" :subheading="__('Update your name and email address')">
+    <x-settings.layout :heading="__('Perfil')" :subheading="__('Actualiza tu nombre y correo electrónico')">
         @if ($statusMessage)
             <div
                 @class([
@@ -18,7 +18,7 @@
 
         <form wire:submit="updateProfileInformation" class="space-y-6">
             <label class="block">
-                <span class="mb-2 block text-sm font-medium text-foreground">{{ __('Name') }}</span>
+                <span class="mb-2 block text-sm font-medium text-foreground">{{ __('Nombre') }}</span>
                 <input
                     wire:model="name"
                     type="text"
@@ -34,7 +34,7 @@
 
             <div>
                 <label class="block">
-                    <span class="mb-2 block text-sm font-medium text-foreground">{{ __('Email') }}</span>
+                    <span class="mb-2 block text-sm font-medium text-foreground">{{ __('Correo electrónico') }}</span>
                     <input
                         wire:model="email"
                         type="email"
@@ -50,13 +50,13 @@
                 @if ($this->hasUnverifiedEmail)
                     <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
                         <p>
-                            {{ __('Your email address is unverified.') }}
+                            {{ __('Tu dirección de correo electrónico no está verificada.') }}
                             <button
                                 type="button"
                                 wire:click.prevent="resendVerificationNotification"
                                 class="ms-1 font-semibold underline decoration-amber-500 underline-offset-2 transition hover:text-amber-900"
                             >
-                                {{ __('Click here to re-send the verification email.') }}
+                                {{ __('Haz clic aquí para reenviar el correo de verificación.') }}
                             </button>
                         </p>
                     </div>
@@ -68,7 +68,7 @@
                     type="submit"
                     class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-hover"
                 >
-                    {{ __('Save') }}
+                    {{ __('Guardar') }}
                 </button>
             </div>
         </form>

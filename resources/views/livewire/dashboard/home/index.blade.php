@@ -5,7 +5,7 @@
     <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Dashboard</p>
-            <h1 class="mt-2 text-3xl font-semibold text-foreground">Servicios</h1>
+            <h1 class="mt-2 text-3xl font-semibold text-foreground">Bienvenido</h1>
             <p class="mt-2 text-sm text-muted-foreground">
                 Administra los servicios registrados, el control de responsables, el estado y las citas.
             </p>
@@ -29,39 +29,6 @@
             {{ session('status') }}
         </div>
     @endif
-
-    <div class="grid gap-4 xl:grid-cols-4">
-        <div class="rounded-2xl border border-layer-line bg-layer p-5 shadow-sm">
-            <p class="text-sm font-medium text-muted-foreground">Total de servicios</p>
-            <p class="mt-3 text-3xl font-semibold text-foreground">{{ $this->totalServices }}</p>
-        </div>
-
-        <div class="rounded-2xl border border-layer-line bg-layer p-5 shadow-sm">
-            <p class="text-sm font-medium text-muted-foreground">Abiertos</p>
-            <p class="mt-3 text-3xl font-semibold text-amber-600">{{ $this->openServices }}</p>
-        </div>
-
-        <div class="rounded-2xl border border-layer-line bg-layer p-5 shadow-sm">
-            <p class="text-sm font-medium text-muted-foreground">Cerrados</p>
-            <p class="mt-3 text-3xl font-semibold text-emerald-600">{{ $this->closedServices }}</p>
-        </div>
-
-        <div class="rounded-2xl border border-layer-line bg-layer p-5 shadow-sm">
-            <div class="grid gap-4">
-                <label class="block">
-                    <span class="mb-2 block text-sm font-medium text-foreground">Por página</span>
-                    <select
-                        wire:model.live="quantity"
-                        class="block w-full rounded-lg border border-layer-line bg-surface px-3 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
-                    >
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                    </select>
-                </label>
-            </div>
-        </div>
-    </div>
 
     <div class="rounded-2xl border border-layer-line bg-layer p-5 shadow-sm">
         <label class="block">

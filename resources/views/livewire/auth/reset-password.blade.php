@@ -1,8 +1,8 @@
-<x-layouts::auth :title="__('Reset password')">
+<x-layouts::auth :title="__('Restablecer contraseña')">
     <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Reset password')" :description="__('Please enter your new password below')" />
+        <x-auth-header :title="__('Restablecer contraseña')" :description="__('Por favor, introduce tu nueva contraseña a continuación')" />
 
-        <!-- Session Status -->
+        <!-- Estado de la sesión -->
         <x-auth-session-status class="text-center" :status="session('status')" />
 
         <form method="POST" action="{{ route('password.update') }}" class="flex flex-col gap-6">
@@ -10,42 +10,44 @@
             <!-- Token -->
             <input type="hidden" name="token" value="{{ request()->route('token') }}">
 
-            <!-- Email Address -->
-            <flux:input
+            <!-- Correo electrónico -->
+            <input
                 name="email"
                 value="{{ request('email') }}"
-                :label="__('Email')"
                 type="email"
                 required
                 autocomplete="email"
+                placeholder="Correo electrónico"
+                class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
             />
 
-            <!-- Password -->
-            <flux:input
+            <!-- Contraseña -->
+            <input
                 name="password"
-                :label="__('Password')"
                 type="password"
                 required
                 autocomplete="new-password"
-                :placeholder="__('Password')"
-                viewable
+                placeholder="Contraseña"
+                class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
             />
 
-            <!-- Confirm Password -->
-            <flux:input
+            <!-- Confirmar contraseña -->
+            <input
                 name="password_confirmation"
-                :label="__('Confirm password')"
                 type="password"
                 required
                 autocomplete="new-password"
-                :placeholder="__('Confirm password')"
-                viewable
+                placeholder="Confirmar contraseña"
+                class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
             />
 
             <div class="flex items-center justify-end">
-                <flux:button type="submit" variant="primary" class="w-full" data-test="reset-password-button">
-                    {{ __('Reset password') }}
-                </flux:button>
+                <button
+                    type="submit"
+                    class="inline-flex w-full items-center justify-center rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-hover"
+                >
+                    {{ __('Restablecer contraseña') }}
+                </button>
             </div>
         </form>
     </div>

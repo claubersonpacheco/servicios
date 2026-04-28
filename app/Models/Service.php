@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
-
+use App\Enums\Status;
 class Service extends Model
 {
     use HasFactory;
@@ -21,6 +21,7 @@ class Service extends Model
             'date_end' => 'date',
             'hour_start' => 'datetime:H:i',
             'hour_end' => 'datetime:H:i',
+            'status' => Status::class,
         ];
     }
 

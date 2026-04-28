@@ -25,8 +25,8 @@ return new class extends Migration
 
 
             // 📌 status do serviço
-            $table->enum('status', ['abierto', 'en_andamiento', 'cerrado'])
-                ->default('abierto');
+            $table->tinyInteger('status')
+                ->default('2');
 
             // 📅 datas e horas separadas
             $table->date('date_start')->nullable();

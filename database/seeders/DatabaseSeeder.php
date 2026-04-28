@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             'users.view',
             'users.manage',
             'services.view',
+            'services.view.all',
             'services.manage',
             'roles.view',
             'roles.manage',

@@ -1,4 +1,4 @@
-<x-layouts::auth :title="__('Two-factor authentication')">
+<x-layouts::auth :title="__('Autenticación de dos factores')">
     <div class="flex flex-col gap-6">
         <div
             class="relative w-full h-auto"
@@ -25,15 +25,15 @@
         >
             <div x-show="!showRecoveryInput">
                 <x-auth-header
-                    :title="__('Authentication code')"
-                    :description="__('Enter the authentication code provided by your authenticator application.')"
+                    :title="__('Código de autenticación')"
+                    :description="__('Introduce el código de autenticación proporcionado por tu aplicación autenticadora.')"
                 />
             </div>
 
             <div x-show="showRecoveryInput">
                 <x-auth-header
-                    :title="__('Recovery code')"
-                    :description="__('Please confirm access to your account by entering one of your emergency recovery codes.')"
+                    :title="__('Código de recuperación')"
+                    :description="__('Confirma el acceso a tu cuenta introduciendo uno de tus códigos de recuperación de emergencia.')"
                 />
             </div>
 
@@ -43,50 +43,55 @@
                 <div class="space-y-5 text-center">
                     <div x-show="!showRecoveryInput">
                         <div class="flex items-center justify-center my-5">
-                            <flux:otp
-                                x-model="code"
-                                length="6"
+                            <input
+                                type="text"
+                                inputmode="numeric"
                                 name="code"
-                                label="OTP Code"
-                                label:sr-only
-                                class="mx-auto"
-                             />
+                                x-model="code"
+                                maxlength="6"
+                                autocomplete="one-time-code"
+                                class="block mx-auto w-64 rounded-lg border border-layer-line bg-surface px-4 py-3 text-center text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
+                            />
                         </div>
                     </div>
 
                     <div x-show="showRecoveryInput">
                         <div class="my-5">
-                            <flux:input
+                            <input
                                 type="text"
                                 name="recovery_code"
                                 x-ref="recovery_code"
                                 x-bind:required="showRecoveryInput"
                                 autocomplete="one-time-code"
                                 x-model="recovery_code"
+                                class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
                             />
                         </div>
 
                         @error('recovery_code')
-                            <flux:text color="red">
+                            <p class="text-sm text-red-600">
                                 {{ $message }}
-                            </flux:text>
+                            </p>
                         @enderror
                     </div>
 
-                    <flux:button
-                        variant="primary"
+                    <button
                         type="submit"
-                        class="w-full"
+                        class="inline-flex w-full items-center justify-center rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-hover"
                     >
-                        {{ __('Continue') }}
-                    </flux:button>
+                        {{ __('Continuar') }}
+                    </button>
                 </div>
 
                 <div class="mt-5 space-x-0.5 text-sm leading-5 text-center">
-                    <span class="opacity-50">{{ __('or you can') }}</span>
+                    <span class="opacity-50">{{ __('o puedes') }}</span>
                     <div class="inline font-medium underline cursor-pointer opacity-80">
-                        <span x-show="!showRecoveryInput" @click="toggleInput()">{{ __('login using a recovery code') }}</span>
-                        <span x-show="showRecoveryInput" @click="toggleInput()">{{ __('login using an authentication code') }}</span>
+                        <span x-show="!showRecoveryInput" @click="toggleInput()">
+                            {{ __('iniciar sesión usando un código de recuperación') }}
+                        </span>
+                        <span x-show="showRecoveryInput" @click="toggleInput()">
+                            {{ __('iniciar sesión usando un código de autenticación') }}
+                        </span>
                     </div>
                 </div>
             </form>

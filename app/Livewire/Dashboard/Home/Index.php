@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Dashboard\Service;
+namespace App\Livewire\Dashboard\Home;
 
 use App\Models\Service;
 use App\Models\User;
@@ -15,7 +15,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Enums\Status;
 
-#[Title('Servicios')]
+#[Title('Portada')]
 class Index extends Component
 {
     use WithPagination;
@@ -52,10 +52,12 @@ class Index extends Component
     #[Computed]
     public function rows(): LengthAwarePaginator
     {
+        $date = now()->toDateString();
+
         return Service::query()
             ->with('user')
             ->visibleFor(Auth::user())
-
+            ->whereDate('date_start', $date)
             ->when(
                 filled($this->search),
                 fn($query) => $query->where(function (Builder $builder) {
@@ -317,6 +319,6 @@ class Index extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.service.index');
+        return view('livewire.dashboard.home.index');
     }
 }
