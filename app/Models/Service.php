@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AdressType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +23,7 @@ class Service extends Model
             'hour_start' => 'datetime:H:i',
             'hour_end' => 'datetime:H:i',
             'status' => Status::class,
+            'address_type' => AdressType::class,
         ];
     }
 

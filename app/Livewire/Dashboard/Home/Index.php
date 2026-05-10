@@ -54,6 +54,7 @@ class Index extends Component
     {
         $date = now()->toDateString();
 
+
         return Service::query()
             ->with('user')
             ->visibleFor(Auth::user())

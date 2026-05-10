@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\AdressType;
+use App\Enums\Status;
 use App\Livewire\Dashboard\Service\Index;
 use App\Models\Service;
 use App\Models\User;
@@ -35,10 +37,15 @@ test('services can be created updated and deleted', function () {
         ->call('create')
         ->set('user_id', $responsible->id)
         ->set('code', 'SRV-100')
-        ->set('address', 'Rua Central 123')
+        ->set('address_type', AdressType::CALLE->value)
+        ->set('address', 'Central')
+        ->set('number', '123')
+        ->set('complement', 'Piso 2')
+        ->set('city', 'Madrid')
+        ->set('state', 'Madrid')
         ->set('postal', '28001')
         ->set('description', 'Instalacao inicial')
-        ->set('status', 'abierto')
+        ->set('status', Status::ABIERTO->value)
         ->set('date_start', '2026-04-26')
         ->set('date_end', '2026-04-27')
         ->set('hour_start', '08:00')
@@ -50,15 +57,22 @@ test('services can be created updated and deleted', function () {
 
     expect($service)->not->toBeNull();
     expect($service->user_id)->toBe($responsible->id);
+    expect($service->address_type)->toBe(AdressType::CALLE);
+    expect($service->number)->toBe('123');
+    expect($service->complement)->toBe('Piso 2');
+    expect($service->city)->toBe('Madrid');
+    expect($service->state)->toBe('Madrid');
 
     Livewire::test(Index::class)
         ->call('edit', $service->id)
-        ->set('status', 'cerrado')
+        ->set('status', Status::FINALIZADO->value)
+        ->set('number', '456')
         ->set('description', 'Servico finalizado')
         ->call('save')
         ->assertHasNoErrors();
 
-    expect($service->fresh()->status)->toBe('cerrado');
+    expect($service->fresh()->status)->toBe(Status::FINALIZADO);
+    expect($service->fresh()->number)->toBe('456');
     expect($service->fresh()->description)->toBe('Servico finalizado');
 
     Livewire::test(Index::class)

@@ -20,7 +20,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('dashboard')->group(function () {
 
         Route::livewire('/', HomeIndex::class)
-            ->middleware('permission:home.view')
             ->name('dashboard');
 
         Route::livewire('/services', ServiceIndex::class)

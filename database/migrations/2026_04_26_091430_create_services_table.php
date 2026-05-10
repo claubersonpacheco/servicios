@@ -19,7 +19,12 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->string('code');
+            $table->tinyInteger('address_type')->default('1');
             $table->string('address')->nullable();
+            $table->string('number')->nullable();
+            $table->string('complement')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
             $table->string('postal')->nullable();
             $table->text('description')->nullable();
 
