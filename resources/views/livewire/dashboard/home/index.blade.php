@@ -72,6 +72,8 @@
                                 @endif
                             </button>
                         </th>
+
+                        <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Responsable</th>
                          <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                             <button type="button" wire:click="sort('date_start')" class="inline-flex items-center gap-x-2">
                                 Fecha
@@ -81,7 +83,6 @@
                             </button>
                         </th>
                         <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Hora</th>
-                        <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Responsable</th>
                         <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                             <button type="button" wire:click="sort('status')" class="inline-flex items-center gap-x-2">
                                 Estado
@@ -101,19 +102,40 @@
                                 <div>
                                     <p class="font-medium text-foreground">{{ $service->code }}</p>
                                     @if ($service->address)
-                                        @php($mapsDestination = trim($service->address.' '.$service->postal))
+                                        @php($addressParts = array_filter([
+                                            $service->address_type?->label(),
+                                            $service->address,
+                                            $service->number,
+                                            $service->complement,
+                                            $service->city,
+                                            $service->state,
+                                            $service->postal,
+                                        ]))
+                                        @php($mapsAddressParts = array_filter([
+                                            $service->address_type?->label(),
+                                            $service->address,
+                                            $service->number,
+                                            $service->city,
+                                            $service->state,
+                                            $service->postal,
+                                        ]))
+                                        @php($fullAddress = implode(', ', $addressParts))
+                                        @php($mapsAddress = implode(', ', $mapsAddressParts))
                                         <a
-                                            href="{{ 'https://www.google.com/maps/dir/?api=1&destination='.urlencode($mapsDestination) }}"
+                                            href="{{ 'https://www.google.com/maps/dir/?api=1&destination='.urlencode($mapsAddress) }}"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             class="text-sm text-primary transition hover:text-primary-hover hover:underline"
                                         >
-                                            {{ $service->address }}
+                                            {{ $fullAddress }}
                                         </a>
                                     @else
                                         <p class="text-sm text-muted-foreground">Sin dirección informada</p>
                                     @endif
                                 </div>
+                            </td>
+                             <td class="whitespace-nowrap px-5 py-4 text-sm text-foreground">
+                                {{ $service->user?->name ?? 'Sin responsable' }}
                             </td>
                             <td class="px-5 py-4 text-sm text-muted-foreground">
                                 <div>{{ $service->date_start?->format('d/m') ?? '--' }}</div>
@@ -122,9 +144,7 @@
                                 <div>{{ $service->hour_start?->format('H:i') ?? '--:--' }} - {{ $service->hour_end?->format('H:i') ?? '--:--' }}</div>
                             </td>
 
-                            <td class="whitespace-nowrap px-5 py-4 text-sm text-foreground">
-                                {{ $service->user?->name ?? 'Sin responsable' }}
-                            </td>
+
 
                             <td class="whitespace-nowrap px-5 py-4">
                                 @php($statusClasses = [
@@ -186,7 +206,7 @@
         </div>
     </div>
 
-    @if ($showFormModal)
+     @if ($showFormModal)
         <div class="fixed inset-0 z-80 overflow-y-auto">
             <div class="fixed inset-0 bg-slate-900/50" wire:click="closeFormModal"></div>
 
@@ -241,18 +261,89 @@
                                 @enderror
                             </label>
 
-                            <label class="block md:col-span-2">
-                                <span class="mb-2 block text-sm font-medium text-foreground">Dirección</span>
-                                <input
-                                    type="text"
-                                    wire:model.live="address"
-                                    class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
-                                    placeholder="Ingrese la dirección del servicio"
-                                >
-                                @error('address')
-                                    <span class="mt-2 block text-sm text-red-600">{{ $message }}</span>
-                                @enderror
-                            </label>
+                            <div class="grid gap-5 md:col-span-2 md:grid-cols-[10rem_minmax(0,1fr)_8rem]">
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-medium text-foreground">Tipo de vía</span>
+                                    <select
+                                        wire:model.live="address_type"
+                                        class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
+                                    >
+                                        @foreach (\App\Enums\AdressType::cases() as $addressTypeOption)
+                                            <option value="{{ $addressTypeOption->value }}">{{ $addressTypeOption->label() }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('address_type')
+                                        <span class="mt-2 block text-sm text-red-600">{{ $message }}</span>
+                                    @enderror
+                                </label>
+
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-medium text-foreground">Dirección</span>
+                                    <input
+                                        type="text"
+                                        wire:model.live="address"
+                                        class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
+                                        placeholder="Nombre de la vía"
+                                    >
+                                    @error('address')
+                                        <span class="mt-2 block text-sm text-red-600">{{ $message }}</span>
+                                    @enderror
+                                </label>
+
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-medium text-foreground">Número</span>
+                                    <input
+                                        type="text"
+                                        wire:model.live="number"
+                                        class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
+                                        placeholder="12"
+                                    >
+                                    @error('number')
+                                        <span class="mt-2 block text-sm text-red-600">{{ $message }}</span>
+                                    @enderror
+                                </label>
+                            </div>
+
+                            <div class="grid gap-5 md:col-span-2 md:grid-cols-3">
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-medium text-foreground">Complemento</span>
+                                    <input
+                                        type="text"
+                                        wire:model.live="complement"
+                                        class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
+                                        placeholder="Piso, puerta, bloque"
+                                    >
+                                    @error('complement')
+                                        <span class="mt-2 block text-sm text-red-600">{{ $message }}</span>
+                                    @enderror
+                                </label>
+
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-medium text-foreground">Ciudad</span>
+                                    <input
+                                        type="text"
+                                        wire:model.live="city"
+                                        class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
+                                        placeholder="Madrid"
+                                    >
+                                    @error('city')
+                                        <span class="mt-2 block text-sm text-red-600">{{ $message }}</span>
+                                    @enderror
+                                </label>
+
+                                <label class="block">
+                                    <span class="mb-2 block text-sm font-medium text-foreground">Provincia</span>
+                                    <input
+                                        type="text"
+                                        wire:model.live="state"
+                                        class="block w-full rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
+                                        placeholder="Madrid"
+                                    >
+                                    @error('state')
+                                        <span class="mt-2 block text-sm text-red-600">{{ $message }}</span>
+                                    @enderror
+                                </label>
+                            </div>
 
                             <label class="block">
                                 <span class="mb-2 block text-sm font-medium text-foreground">Código postal</span>
