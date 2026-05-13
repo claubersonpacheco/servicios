@@ -33,7 +33,7 @@
                     </a>
                 @else
                     <a href="{{ route('login') }}"
-                       class="px-5 py-2 text-sm border rounded">
+                       class="px-5 py-2 text-sm border rounded dark:text-white">
                         Iniciar sesión
                     </a>
                 @endauth
