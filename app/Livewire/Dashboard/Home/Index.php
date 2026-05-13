@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard\Home;
 
+use App\Enums\AdressType;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,7 +30,12 @@ class Index extends Component
     public ?int $user_id = null;
 
     public string $code = '';
+    public int $address_type = AdressType::CALLE->value;
     public string $address = '';
+    public string $number = '';
+    public string $complement = '';
+    public string $city = '';
+    public string $state = '';
     public string $postal = '';
     public string $description = '';
     public int $status = Status::ABIERTO->value;
@@ -67,6 +73,9 @@ class Index extends Component
                     $builder
                         ->where('code', 'like', $term)
                         ->orWhere('address', 'like', $term)
+                        ->orWhere('number', 'like', $term)
+                        ->orWhere('city', 'like', $term)
+                        ->orWhere('state', 'like', $term)
                         ->orWhere('postal', 'like', $term)
                         ->orWhere('description', 'like', $term)
                         ->orWhereHas(
@@ -176,7 +185,12 @@ class Index extends Component
         $this->editingServiceId = $service->id;
         $this->user_id = $service->user_id;
         $this->code = $service->code;
+        $this->address_type = $service->address_type?->value ?? AdressType::CALLE->value;
         $this->address = $service->address ?? '';
+        $this->number = $service->number ?? '';
+        $this->complement = $service->complement ?? '';
+        $this->city = $service->city ?? '';
+        $this->state = $service->state ?? '';
         $this->postal = $service->postal ?? '';
         $this->description = $service->description ?? '';
         $this->status = $service->status->value; // ✅ correcto
@@ -200,7 +214,12 @@ class Index extends Component
         $payload = [
             'user_id' => $validated['user_id'],
             'code' => $validated['code'],
+            'address_type' => $validated['address_type'],
             'address' => $validated['address'] ?: null,
+            'number' => $validated['number'] ?: null,
+            'complement' => $validated['complement'] ?: null,
+            'city' => $validated['city'] ?: null,
+            'state' => $validated['state'] ?: null,
             'postal' => $validated['postal'] ?: null,
             'description' => $validated['description'] ?: null,
             'status' => $validated['status'], // ✅ int correcto
@@ -284,7 +303,12 @@ class Index extends Component
         $this->editingServiceId = null;
         $this->user_id = null;
         $this->code = '';
+        $this->address_type = AdressType::CALLE->value;
         $this->address = '';
+        $this->number = '';
+        $this->complement = '';
+        $this->city = '';
+        $this->state = '';
         $this->postal = '';
         $this->description = '';
         $this->status = Status::ABIERTO->value;
@@ -307,7 +331,12 @@ class Index extends Component
                 'max:255',
                 Rule::unique(Service::class, 'code')->ignore($this->editingServiceId),
             ],
+            'address_type' => ['required', Rule::in(array_column(AdressType::cases(), 'value'))],
             'address' => ['nullable', 'string', 'max:255'],
+            'number' => ['nullable', 'string', 'max:255'],
+            'complement' => ['nullable', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:255'],
+            'state' => ['nullable', 'string', 'max:255'],
             'postal' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'status' => ['required', Rule::in(array_column(Status::cases(), 'value'))],

@@ -2,6 +2,7 @@
 
 use App\Enums\AdressType;
 use App\Enums\Status;
+use App\Livewire\Dashboard\Home\Index as HomeIndex;
 use App\Livewire\Dashboard\Service\Index;
 use App\Models\Service;
 use App\Models\User;
@@ -82,5 +83,39 @@ test('services can be created updated and deleted', function () {
 
     $this->assertDatabaseMissing('services', [
         'id' => $service->id,
+    ]);
+});
+
+test('services created from dashboard home persist address number', function () {
+    $user = User::factory()->create();
+    $responsible = User::factory()->create();
+    Permission::query()->create(['name' => 'services.manage', 'guard_name' => 'web']);
+    $user->givePermissionTo('services.manage');
+
+    $this->actingAs($user);
+
+    Livewire::test(HomeIndex::class)
+        ->call('create')
+        ->set('user_id', $responsible->id)
+        ->set('code', 'SRV-HOME-100')
+        ->set('address_type', AdressType::CALLE->value)
+        ->set('address', 'Central')
+        ->set('number', '789')
+        ->set('complement', 'Piso 3')
+        ->set('city', 'Madrid')
+        ->set('state', 'Madrid')
+        ->set('postal', '28001')
+        ->set('status', Status::ABIERTO->value)
+        ->set('date_start', '2026-05-13')
+        ->set('date_end', '2026-05-13')
+        ->call('save')
+        ->assertHasNoErrors();
+
+    $this->assertDatabaseHas('services', [
+        'code' => 'SRV-HOME-100',
+        'number' => '789',
+        'complement' => 'Piso 3',
+        'city' => 'Madrid',
+        'state' => 'Madrid',
     ]);
 });
