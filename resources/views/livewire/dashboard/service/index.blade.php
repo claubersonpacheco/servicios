@@ -107,19 +107,20 @@
                         </th>
 
                         <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Responsable</th>
-                         <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                            <button type="button" wire:click="sort('date_start')" class="inline-flex items-center gap-x-2">
-                                Fecha
-                                @if ($sortBy === 'date_start')
-                                    <span class="text-primary">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
-                                @endif
-                            </button>
-                        </th>
+
                         <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Hora</th>
                         <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                             <button type="button" wire:click="sort('status')" class="inline-flex items-center gap-x-2">
                                 Estado
                                 @if ($sortBy === 'status')
+                                    <span class="text-primary">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
+                                @endif
+                            </button>
+                        </th>
+                        <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                            <button type="button" wire:click="sort('date_start')" class="inline-flex items-center gap-x-2">
+                                Fecha
+                                @if ($sortBy === 'date_start')
                                     <span class="text-primary">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                 @endif
                             </button>
@@ -186,9 +187,7 @@
                              <td class="whitespace-nowrap px-5 py-4 text-sm text-foreground">
                                 {{ $service->user?->name ?? 'Sin responsable' }}
                             </td>
-                            <td class="px-5 py-4 text-sm text-muted-foreground">
-                                <div>{{ $service->date_start?->format('d/m') ?? '--' }}</div>
-                            </td>
+
                             <td class="px-5 py-4 text-sm text-muted-foreground">
                                 <div>{{ $service->hour_start?->format('H:i') ?? '--:--' }} - {{ $service->hour_end?->format('H:i') ?? '--:--' }}</div>
                             </td>
@@ -207,6 +206,9 @@
 
                                     {{ $service->status->label() }}
                                 </span>
+                            </td>
+                             <td class="px-5 py-4 text-sm text-muted-foreground">
+                                <div>{{ $service->date_start?->format('d/m') ?? '--' }}</div>
                             </td>
 
                             <td class="whitespace-nowrap px-5 py-4">
