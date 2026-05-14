@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Enums\AdressType;
+use App\Enums\Status;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
-use App\Enums\Status;
+
 class Service extends Model
 {
     use HasFactory;
@@ -40,8 +41,8 @@ class Service extends Model
     public function scopeVisibleFor(Builder $query, $user): Builder
     {
         return $query->when(
-            !$user?->can('service.view.all'),
-            fn($q) => $q->where('user_id', $user->id)
+            ! $user?->can('services.view.all'),
+            fn ($q) => $q->where('user_id', $user->id)
         );
     }
 }

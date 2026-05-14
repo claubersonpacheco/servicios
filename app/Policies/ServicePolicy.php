@@ -20,7 +20,7 @@ class ServicePolicy
      */
     public function view(User $user, Service $service): bool
     {
-        return $user->can('service.view.all')
+        return $user->can('services.view.all')
             || $service->user_id === $user->id;
     }
 
