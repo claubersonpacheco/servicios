@@ -59,13 +59,43 @@
                         @endif
                     </div>
 
-                    <input
-                        type="password"
-                        name="password"
-                        required
-                        placeholder="••••••••"
-                        class="mt-1 w-full rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                    <div class="relative mt-1">
+                        <input
+                            id="password"
+                            type="password"
+                            name="password"
+                            required
+                            placeholder="••••••••"
+                            class="w-full rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white px-4 py-2 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+
+                        <button
+                            type="button"
+                            class="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:text-gray-200"
+                            aria-label="Mostrar contraseña"
+                            aria-pressed="false"
+                            onclick="
+                                const input = document.getElementById('password');
+                                const isHidden = input.type === 'password';
+                                input.type = isHidden ? 'text' : 'password';
+                                this.setAttribute('aria-pressed', isHidden ? 'true' : 'false');
+                                this.setAttribute('aria-label', isHidden ? 'Ocultar contraseña' : 'Mostrar contraseña');
+                                this.querySelector('[data-icon-eye]').classList.toggle('hidden', isHidden);
+                                this.querySelector('[data-icon-eye-off]').classList.toggle('hidden', !isHidden);
+                            "
+                        >
+                            <svg data-icon-eye class="size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            <svg data-icon-eye-off class="hidden size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/>
+                                <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/>
+                                <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/>
+                                <path d="m2 2 20 20"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- REMEMBER -->
