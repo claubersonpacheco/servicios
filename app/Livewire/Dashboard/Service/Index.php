@@ -5,6 +5,8 @@ namespace App\Livewire\Dashboard\Service;
 use App\Enums\AdressType;
 use App\Models\Service;
 use App\Models\User;
+use Carbon\CarbonImmutable;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -25,6 +27,9 @@ class Index extends Component
     public string $search = '';
     public string $sortBy = 'created_at';
     public string $sortDirection = 'desc';
+    public string $filterYear = '';
+    public string $filterMonth = '';
+    public string $filterWeek = '';
 
     public ?int $editingServiceId = null;
     public ?int $user_id = null;
@@ -58,30 +63,8 @@ class Index extends Component
     #[Computed]
     public function rows(): LengthAwarePaginator
     {
-        return Service::query()
+        return $this->filteredServicesQuery()
             ->with('user')
-            ->visibleFor(Auth::user())
-
-            ->when(
-                filled($this->search),
-                fn($query) => $query->where(function (Builder $builder) {
-                    $term = "%{$this->search}%";
-
-                    $builder
-                        ->where('code', 'like', $term)
-                        ->orWhere('address', 'like', $term)
-                        ->orWhere('number', 'like', $term)
-                        ->orWhere('city', 'like', $term)
-                        ->orWhere('state', 'like', $term)
-                        ->orWhere('postal', 'like', $term)
-                        ->orWhere('description', 'like', $term)
-                        ->orWhereHas(
-                            'user',
-                            fn($q) => $q->where('name', 'like', $term)
-                        );
-                })
-            )
-
             ->orderBy($this->sortBy, $this->sortDirection)
             ->paginate($this->quantity)
             ->withQueryString();
@@ -96,6 +79,20 @@ class Index extends Component
         return User::query()
             ->orderBy('name')
             ->get(['id', 'name']);
+    }
+
+    #[Computed]
+    public function years(): \Illuminate\Support\Collection
+    {
+        return Service::query()
+            ->visibleFor(Auth::user())
+            ->whereNotNull('date_start')
+            ->orderByDesc('date_start')
+            ->get(['date_start'])
+            ->map(fn (Service $service) => $service->date_start?->format('Y'))
+            ->filter()
+            ->unique()
+            ->values();
     }
 
     /* =========================
@@ -123,6 +120,12 @@ class Index extends Component
             ->count();
     }
 
+    #[Computed]
+    public function filteredServices(): int
+    {
+        return $this->filteredServicesQuery()->count();
+    }
+
     /* =========================
         SORT / SEARCH
     ========================= */
@@ -133,6 +136,32 @@ class Index extends Component
 
     public function updatedQuantity(): void
     {
+        $this->resetPage();
+    }
+
+    public function updatedFilterYear(): void
+    {
+        $this->filterMonth = '';
+        $this->filterWeek = '';
+        $this->resetPage();
+    }
+
+    public function updatedFilterMonth(): void
+    {
+        $this->filterWeek = '';
+        $this->resetPage();
+    }
+
+    public function updatedFilterWeek(): void
+    {
+        $this->resetPage();
+    }
+
+    public function clearDateFilters(): void
+    {
+        $this->filterYear = '';
+        $this->filterMonth = '';
+        $this->filterWeek = '';
         $this->resetPage();
     }
 
@@ -342,6 +371,56 @@ class Index extends Component
             'hour_start' => ['nullable', 'date_format:H:i'],
             'hour_end' => ['nullable', 'date_format:H:i'],
         ];
+    }
+
+    protected function filteredServicesQuery(): Builder
+    {
+        return Service::query()
+            ->visibleFor(Auth::user())
+            ->when(
+                filled($this->search),
+                fn ($query) => $query->where(function (Builder $builder) {
+                    $term = "%{$this->search}%";
+
+                    $builder
+                        ->where('code', 'like', $term)
+                        ->orWhere('address', 'like', $term)
+                        ->orWhere('number', 'like', $term)
+                        ->orWhere('city', 'like', $term)
+                        ->orWhere('state', 'like', $term)
+                        ->orWhere('postal', 'like', $term)
+                        ->orWhere('description', 'like', $term)
+                        ->orWhereHas(
+                            'user',
+                            fn ($q) => $q->where('name', 'like', $term)
+                        );
+                })
+            )
+            ->when(
+                filled($this->filterYear),
+                fn (Builder $query) => $query->whereYear('date_start', (int) $this->filterYear)
+            )
+            ->when(
+                filled($this->filterMonth),
+                fn (Builder $query) => $query->whereMonth('date_start', (int) $this->filterMonth)
+            )
+            ->when(filled($this->filterWeek), function (Builder $query) {
+                [$year, $week] = sscanf($this->filterWeek, '%d-W%d');
+
+                if (! $year || ! $week) {
+                    return;
+                }
+
+                $startOfWeek = CarbonImmutable::now()
+                    ->setISODate($year, $week)
+                    ->startOfWeek(CarbonInterface::MONDAY);
+                $endOfWeek = $startOfWeek->endOfWeek(CarbonInterface::SUNDAY);
+
+                $query->whereBetween('date_start', [
+                    $startOfWeek->toDateString(),
+                    $endOfWeek->toDateString(),
+                ]);
+            });
     }
 
     public function render()

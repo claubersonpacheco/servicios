@@ -119,3 +119,53 @@ test('services created from dashboard home persist address number', function () 
         'state' => 'Madrid',
     ]);
 });
+
+test('services can be filtered by year month and week', function () {
+    $user = User::factory()->create();
+    Permission::query()->create(['name' => 'services.view', 'guard_name' => 'web']);
+    $user->givePermissionTo('services.view');
+
+    Service::factory()->create([
+        'user_id' => $user->id,
+        'code' => 'SRV-MAY-W20',
+        'date_start' => '2026-05-13',
+    ]);
+
+    Service::factory()->create([
+        'user_id' => $user->id,
+        'code' => 'SRV-APRIL',
+        'date_start' => '2026-04-10',
+    ]);
+
+    Service::factory()->create([
+        'user_id' => $user->id,
+        'code' => 'SRV-OLD',
+        'date_start' => '2025-05-13',
+    ]);
+
+    $this->actingAs($user);
+
+    $component = Livewire::test(Index::class)
+        ->set('filterYear', '2026')
+        ->assertSee('SRV-MAY-W20')
+        ->assertSee('SRV-APRIL')
+        ->assertDontSee('SRV-OLD');
+
+    expect($component->instance()->filteredServices())->toBe(2);
+
+    $component
+        ->set('filterMonth', '5')
+        ->assertSee('SRV-MAY-W20')
+        ->assertDontSee('SRV-APRIL')
+        ->assertDontSee('SRV-OLD');
+
+    expect($component->instance()->filteredServices())->toBe(1);
+
+    $component
+        ->set('filterWeek', '2026-W20')
+        ->assertSee('SRV-MAY-W20')
+        ->assertDontSee('SRV-APRIL')
+        ->assertDontSee('SRV-OLD');
+
+    expect($component->instance()->filteredServices())->toBe(1);
+});

@@ -1,6 +1,21 @@
 <div class="space-y-6">
     @php($rows = $this->rows)
     @php($users = $this->users)
+    @php($years = $this->years)
+    @php($months = [
+        '1' => 'Enero',
+        '2' => 'Febrero',
+        '3' => 'Marzo',
+        '4' => 'Abril',
+        '5' => 'Mayo',
+        '6' => 'Junio',
+        '7' => 'Julio',
+        '8' => 'Agosto',
+        '9' => 'Septiembre',
+        '10' => 'Octubre',
+        '11' => 'Noviembre',
+        '12' => 'Diciembre',
+    ])
 
     <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
@@ -30,10 +45,15 @@
         </div>
     @endif
 
-    <div class="grid gap-4 xl:grid-cols-4">
+    <div class="grid gap-4 xl:grid-cols-5">
         <div class="rounded-2xl border border-layer-line bg-layer p-5 shadow-sm">
             <p class="text-sm font-medium text-muted-foreground">Total de servicios</p>
             <p class="mt-3 text-3xl font-semibold text-foreground">{{ $this->totalServices }}</p>
+        </div>
+
+        <div class="rounded-2xl border border-layer-line bg-layer p-5 shadow-sm">
+            <p class="text-sm font-medium text-muted-foreground">Servicios filtrados</p>
+            <p class="mt-3 text-3xl font-semibold text-primary">{{ $this->filteredServices }}</p>
         </div>
 
         <div class="rounded-2xl border border-layer-line bg-layer p-5 shadow-sm">
@@ -64,23 +84,72 @@
     </div>
 
     <div class="rounded-2xl border border-layer-line bg-layer p-5 shadow-sm">
-        <label class="block">
-            <span class="mb-2 block text-sm font-medium text-foreground">Buscar servicio</span>
-            <div class="relative">
-                <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5">
-                    <svg class="size-4 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="m21 21-4.3-4.3"/>
-                    </svg>
+        <div class="grid gap-4 xl:grid-cols-5">
+            <label class="block xl:col-span-2">
+                <span class="mb-2 block text-sm font-medium text-foreground">Buscar servicio</span>
+                <div class="relative">
+                    <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5">
+                        <svg class="size-4 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.3-4.3"/>
+                        </svg>
+                    </div>
+                    <input
+                        type="text"
+                        wire:model.live.debounce.300ms="search"
+                        class="block w-full rounded-lg border border-layer-line bg-surface py-3 ps-10 pe-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
+                        placeholder="Busque por código, dirección, descripción o responsable"
+                    >
                 </div>
-                <input
-                    type="text"
-                    wire:model.live.debounce.300ms="search"
-                    class="block w-full rounded-lg border border-layer-line bg-surface py-3 ps-10 pe-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
-                    placeholder="Busque por código, dirección, descripción o responsable"
+            </label>
+
+            <label class="block">
+                <span class="mb-2 block text-sm font-medium text-foreground">Año</span>
+                <select
+                    wire:model.live="filterYear"
+                    class="block w-full rounded-lg border border-layer-line bg-surface px-3 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0"
                 >
+                    <option value="">Todos</option>
+                    @foreach ($years as $year)
+                        <option value="{{ $year }}">{{ $year }}</option>
+                    @endforeach
+                </select>
+            </label>
+
+            <label class="block">
+                <span class="mb-2 block text-sm font-medium text-foreground">Mes</span>
+                <select
+                    wire:model.live="filterMonth"
+                    @disabled(blank($filterYear))
+                    class="block w-full rounded-lg border border-layer-line bg-surface px-3 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                    <option value="">Todos</option>
+                    @foreach ($months as $monthValue => $monthName)
+                        <option value="{{ $monthValue }}">{{ $monthName }}</option>
+                    @endforeach
+                </select>
+            </label>
+
+            <div class="grid gap-3 sm:grid-cols-[1fr_auto] xl:grid-cols-1">
+                <label class="block">
+                    <span class="mb-2 block text-sm font-medium text-foreground">Semana</span>
+                    <input
+                        type="week"
+                        wire:model.live="filterWeek"
+                        @disabled(blank($filterYear))
+                        class="block w-full rounded-lg border border-layer-line bg-surface px-3 py-3 text-sm text-foreground focus:border-primary-focus focus:outline-hidden focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                </label>
+
+                <button
+                    type="button"
+                    wire:click="clearDateFilters"
+                    class="inline-flex items-center justify-center self-end rounded-lg border border-layer-line bg-surface px-4 py-3 text-sm font-semibold text-foreground transition hover:bg-muted-hover focus:outline-hidden"
+                >
+                    Limpiar
+                </button>
             </div>
-        </label>
+        </div>
     </div>
 
     <x-services.list :rows="$rows" :sort-by="$sortBy" :sort-direction="$sortDirection" />
