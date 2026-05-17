@@ -32,8 +32,8 @@
                             @endif
                         </button>
                     </th>
-                    <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Responsable</th>
                     <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Hora</th>
+                    <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Responsable</th>
                     <th class="px-5 py-3 text-start text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                         <button type="button" wire:click="sort('status')" class="inline-flex items-center gap-x-2">
                             Estado
@@ -108,11 +108,11 @@
                                 @endif
                             </div>
                         </td>
-                        <td class="whitespace-nowrap px-5 py-4 text-sm text-foreground">
-                            {{ $service->user?->name ?? 'Sin responsable' }}
-                        </td>
                         <td class="px-5 py-4 text-sm text-muted-foreground">
                             <div>{{ $service->hour_start?->format('H:i') ?? '--:--' }} - {{ $service->hour_end?->format('H:i') ?? '--:--' }}</div>
+                        </td>
+                        <td class="whitespace-nowrap px-5 py-4 text-sm text-foreground">
+                            {{ $service->user?->name ?? 'Sin responsable' }}
                         </td>
                         <td class="whitespace-nowrap px-5 py-4">
                             <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold {{ $statusClasses[$service->status->value] ?? 'bg-slate-100 text-slate-700' }}">
